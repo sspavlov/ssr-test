@@ -1,25 +1,24 @@
-import SmallCard from '../components/SmallCard';
-import { projectIcons } from '../components/Icons';
-
-import { projects } from '../utils/projectsData';
-
-const Home = () => (
-  <div className="home">
-    <h1>What Can I Deploy to Static Apps?</h1>
-    <div className="card-grid">
-      {projects.map((project) => {
-        const Icon = projectIcons[project.id];
-        return (
-          <SmallCard
-            key={project.id}
-            Icon={Icon}
-            title={project.name}
-            slug={project.slug}
-          />
-        );
-      })}
+const Home = (props) => {
+  console.log(props);
+  return (
+    <div className="home">
+      <h1>What Can I Deploy to Static Apps?</h1>
+      <div className="card-grid">{JSON.stringify(props)}</div>
     </div>
-  </div>
-);
+  );
+};
 
 export default Home;
+
+export const getStaticProps = async (context) => {
+  const subreddit = 'typescript';
+  const response = await fetch(`https://www.reddit.com/r/${subreddit}.json`);
+  const result = await response.json();
+
+  return {
+    props: {
+      subreddit,
+      posts: result.data.children,
+    },
+  };
+};
